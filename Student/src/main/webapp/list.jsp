@@ -39,6 +39,7 @@
             <th scope="col">Tên Học Sinh</th>
             <th scope="col">Email</th>
             <th scope="col">Địa chỉ</th>
+            <th scope="col">Lớp</th>
 
 
             <th scope="col">Chỉnh sửa</th>
@@ -53,6 +54,7 @@
                 <td>${s.name}</td>
                 <td>${s.email}</td>
                 <td>${s.address}</td>
+                <td>${s.aClass.name}</td>
 
                 <td>
                     <a class="btn btn-warning" href="#" role="button">Chỉnh

@@ -37,6 +37,14 @@
                 <label for="address">Địa chỉ</label>
                 <input type="text" class="form-control" name="address" id="address">
             </div>
+            <div class="form-group">
+                <label for="idClass">Lớp</label>
+                <select id="idClass" class="form-control" name="idClass">
+                    <c:forEach items="${classes}" var="c">
+                        <option value="${c.id}">${c.name}</option>
+                    </c:forEach>
+                </select>
+            </div>
             <div class="form-group mt-2">
                 <button class="btn btn-success" role="button" type="submit">Thêm mới</button>
                 <button class="btn btn-warning" role="button">Quay lại</button>

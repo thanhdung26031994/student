@@ -1,6 +1,9 @@
 package org.example.student.controller;
 
+import org.example.student.model.Class;
 import org.example.student.model.Student;
+import org.example.student.service.ClassService;
+import org.example.student.service.IClassService;
 import org.example.student.service.IStudentService;
 import org.example.student.service.StudentService;
 
@@ -16,6 +19,7 @@ import java.util.List;
 @WebServlet(name = "StudentServlet", urlPatterns = "/student")
 public class StudentController extends HttpServlet {
     private static final IStudentService service = new StudentService();
+    private static final IClassService classService = new ClassService();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
@@ -29,18 +33,21 @@ public class StudentController extends HttpServlet {
                 break;
             default:
                 listStudent(req,resp);
+                break;
         }
     }
 
     private void showCreate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getRequestDispatcher("create.jsp");
+        List<Class> classList = classService.findAll();
+        req.setAttribute("classes", classList);
         dispatcher.forward(req,resp);
-        resp.sendRedirect("/student");
     }
 
     private void listStudent(HttpServletRequest req, HttpServletResponse resp) {
         RequestDispatcher dispatcher = req.getRequestDispatcher("list.jsp");
         List<Student> studentList = service.getAllStudent();
+
         req.setAttribute("student", studentList);
         try {
             dispatcher.forward(req,resp);
@@ -68,7 +75,10 @@ public class StudentController extends HttpServlet {
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String address = req.getParameter("address");
-        Student student = new Student(id, name, email, address);
+        Integer idClass = Integer.valueOf(req.getParameter("idClass"));
+        String nameClass = req.getParameter("nameClass");
+        Class aClass = new Class(idClass, nameClass);
+        Student student = new Student(id, name, email, address, aClass);
         service.addStudent(student);
         resp.sendRedirect("/student");
     }

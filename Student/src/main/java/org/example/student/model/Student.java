@@ -5,6 +5,7 @@ public class Student {
     private String name;
     private String email;
     private String address;
+    private Class aClass;
 
     public Student() {
     }
@@ -14,6 +15,22 @@ public class Student {
         this.name = name;
         this.email = email;
         this.address = address;
+    }
+
+    public Student(Integer id, String name, String email, String address, Class aClass) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.address = address;
+        this.aClass = aClass;
+    }
+
+    public Class getaClass() {
+        return aClass;
+    }
+
+    public void setaClass(Class aClass) {
+        this.aClass = aClass;
     }
 
     public Integer getId() {
