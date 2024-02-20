@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentService implements IStudentService{
-    private static final String SELECT_STUDENT = "select student.* , class.name as nameClass from student join class on class.c_id = student.c_id;";
+    private static final String SELECT_STUDENT = "select student.* , class.name as nameClass from student left join class on class.c_id = student.c_id;";
     @Override
     public List<Student> getAllStudent() {
         List<Student> studentList =new ArrayList<>();
@@ -68,5 +68,80 @@ public class StudentService implements IStudentService{
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @Override
+    public void moveById(Integer id) {
+        Connection connection;
+        PreparedStatement statement = null;
+        try {
+            connection = DBConnection.getConnection();
+            statement = connection.prepareStatement("delete from student where id = ?;");
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public void updateStudent(Student student) {
+        Connection connection;
+        PreparedStatement statement = null;
+        try {
+            connection = DBConnection.getConnection();
+            statement = connection.prepareStatement("update student set name = ?, email = ?, address = ?, c_id = ? where id = ?;");
+            statement.setString(1, student.getName());
+            statement.setString(2, student.getEmail());
+            statement.setString(3, student.getAddress());
+            statement.setInt(4, student.getaClass().getId());
+            statement.setInt(5, student.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public Student findById(Integer id) {
+        Student student = null;
+        Connection connection;
+        PreparedStatement statement = null;
+        try {
+            connection = DBConnection.getConnection();
+            statement = connection.prepareStatement("select * from student where id = ?;");
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()){
+                Integer id1 = rs.getInt("id");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                String address = rs.getString("address");
+                Integer idClass = rs.getInt("c_id");
+                Class aClass = new Class(idClass);
+                student = new Student(id1, name, email, address, aClass);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return student;
     }
 }

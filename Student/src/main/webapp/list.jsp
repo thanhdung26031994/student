@@ -57,11 +57,11 @@
                 <td>${s.aClass.name}</td>
 
                 <td>
-                    <a class="btn btn-warning" href="#" role="button">Chỉnh
+                    <a class="btn btn-warning" href="/student?action=edit&id=${s.id}" role="button">Chỉnh
                         sửa</a>
                 </td>
                 <td>
-                    <a class="btn btn-warning" href="#" role="button">Xoá</a>
+                    <a class="btn btn-warning" href="/student?action=delete&id=${s.id}" role="button">Xoá</a>
                 </td>
             </tr>
         </c:forEach>

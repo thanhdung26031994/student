@@ -8,4 +8,10 @@ public interface IStudentService {
     List<Student> getAllStudent();
 
     void addStudent(Student student);
+
+    void moveById(Integer id);
+
+    void updateStudent(Student student);
+
+    Student findById(Integer id);
 }

@@ -31,10 +31,28 @@ public class StudentController extends HttpServlet {
             case "create":
                 showCreate(req,resp);
                 break;
+            case "edit":
+                showEdit(req,resp);
+                break;
+            case "delete":
+                deleteStudent(req,resp);
+                break;
             default:
                 listStudent(req,resp);
                 break;
         }
+    }
+
+    private void showEdit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        List<Class> classList = classService.findAll();
+        req.setAttribute("classes", classList);
+        Student student = service.findById(id);
+        req.setAttribute("student", student);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("edit.jsp");
+        dispatcher.forward(req,resp);
+        resp.sendRedirect("/student");
+
     }
 
     private void showCreate(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -67,7 +85,31 @@ public class StudentController extends HttpServlet {
             case "create":
                 createStudent(req,resp);
                 break;
+            case "edit":
+                editStudent(req,resp);
+                break;
+
         }
+    }
+
+    private void editStudent(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
+        String address = req.getParameter("address");
+        Integer idClass = Integer.valueOf(req.getParameter("idClass"));
+        String nameClass = req.getParameter("nameClass");
+        Class aClass = new Class(idClass, nameClass);
+        Student student = new Student(id, name, email, address, aClass);
+        service.updateStudent(student);
+        resp.sendRedirect("/student");
+
+    }
+
+    private void deleteStudent(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        service.moveById(id);
+        resp.sendRedirect("/student");
     }
 
     private void createStudent(HttpServletRequest req, HttpServletResponse resp) throws IOException {
